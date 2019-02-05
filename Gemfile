@@ -12,6 +12,9 @@ gem 'rails', '~> 5.1.3'
 gem 'pg', '~> 0.18'
 gem 'devise', git: 'https://github.com/plataformatec/devise.git'
 gem 'faker'
+# ERD for model's diagram making
+gem 'rails-erd', group: :development
+gem 'ruby-graphviz'
 # Paypal for payment
 gem 'paypal-sdk-rest'
 # Use Puma as the app server
