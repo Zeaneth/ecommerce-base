@@ -1,6 +1,12 @@
 class BillingsController < ApplicationController
+  before_action :authenticate_user!
+
+  def index
+    @billings = current_user.billings
+  end
+
   def pre_pay
-    orders = current_user.orders.where(payed: false)
+    orders = current_user.orders.cart
     total = orders.pluck("price * quantity").sum()
     items = orders.map do |order|
       item = {}
@@ -42,12 +48,12 @@ class BillingsController < ApplicationController
       amount = paypal_payment.transactions.first.amount.total
      
       billing = Billing.create(
-      user: current_user,
-      code: paypal_payment.id,
-      payment_method: 'paypal',
-      amount: amount,
-      currency: 'USD'
-      )
+                                user: current_user,
+                                code: paypal_payment.id,
+                                payment_method: 'paypal',
+                                amount: amount,
+                                currency: 'USD'
+                                )
      
       orders = current_user.orders.where(payed: false)
       orders.update_all(payed: true, billing_id: billing.id)
